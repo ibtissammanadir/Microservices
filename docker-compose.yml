@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  user-service:
+    build:
+      context: ./UserMicroService
+    ports:
+      - "8081:8081"
+    environment:
+      - SERVER_PORT=8081
+
+  order-service:
+    build:
+      context: ./OrderMicroService
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80" # Expose le frontend sur le port 3000
+    depends_on:
+      - user-service
+      - order-service
