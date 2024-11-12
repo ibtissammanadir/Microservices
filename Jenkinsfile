@@ -22,11 +22,15 @@ pipeline {
                 script {
                     // Build OrderMicroService
                     dir('OrderMicroService') {
-                        sh 'mvn clean package -DskipTests'
+                        docker.image('maven:3.8.5-openjdk-17').inside {
+                            sh 'mvn clean package -DskipTests'
+                        }
                     }
                     // Build UserMicroService
                     dir('UserMicroService') {
-                        sh 'mvn clean package -DskipTests'
+                        docker.image('maven:3.8.5-openjdk-17').inside {
+                            sh 'mvn clean package -DskipTests'
+                        }
                     }
                 }
             }
@@ -48,7 +52,7 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    // Déployer les conteneurs avec Docker Compose
+                    // Utiliser Docker Compose pour déployer les services
                     sh 'docker-compose down'
                     sh 'docker-compose up -d'
                 }
